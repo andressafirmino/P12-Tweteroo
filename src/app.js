@@ -14,7 +14,7 @@ app.post("/sign-up", (req, res) => {
 
     const { username, avatar } = req.body;
 
-    if (!username || !avatar) {
+    if (!username || !avatar || typeof(username) !== "string") {
         return res.status(400).send('Todos os campos são obrigatórios!');
     }
     nickname.push({
