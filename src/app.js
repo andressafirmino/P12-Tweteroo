@@ -6,15 +6,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const nickname = [{
-    username: 'uame',
-    avatar: 'avatar'
-},
-{
-    username: 'aaaaaaa',
-    avatar: 'avatar'
-}];
+const nickname = [];
 const arrayTweets = [];
+const renderTweets = [];
 
 app.post("/sign-up", (req, res) => {
 
@@ -28,8 +22,6 @@ app.post("/sign-up", (req, res) => {
 
 app.post("/tweets", (req, res) => {
     for (let i = 0; i < nickname.length; i++) {
-        console.log(nickname);
-        console.log(req.body.username);
         if (req.body.username === nickname[i].username) {
             if (arrayTweets.length === 10) {
                 arrayTweets.shift()
@@ -52,7 +44,18 @@ app.post("/tweets", (req, res) => {
 
 
 app.get("/tweets", (req, res) => {
-    res.send(arrayTweets);
+    for(let i = 0; i < nickname.length; i++) {
+        for(let j = 0; j < arrayTweets.length; j++) {
+            if(nickname[i].username === arrayTweets[j].username) {
+                renderTweets.push({
+                    username: nickname[i].username,
+                    avatar: nickname[i].avatar,
+                    tweet: arrayTweets[j].tweet
+                })
+            }
+        }
+    }
+    res.send(renderTweets);
 })
 
 const PORT = 5000;
