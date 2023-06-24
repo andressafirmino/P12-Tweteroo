@@ -12,41 +12,53 @@ const renderTweets = [];
 
 app.post("/sign-up", (req, res) => {
 
-    nickname.push({
-        username: req.body.username,
-        avatar: req.body.avatar
-    })
-    res.send('OK');
+    const { username, avatar } = req.body;
 
+    if (!username || !avatar) {
+        return res.status(400).send('Todos os campos são obrigatórios!');
+    }
+    nickname.push({
+        username: username,
+        avatar: avatar
+    })
+    res.status(201).send('OK');
 })
 
 app.post("/tweets", (req, res) => {
-    for (let i = 0; i < nickname.length; i++) {
-        if (req.body.username === nickname[i].username) {
-            if (arrayTweets.length === 10) {
-                arrayTweets.shift()
-                arrayTweets.push({
-                    username: req.body.username,
-                    tweet: req.body.tweet
-                })
-                res.send('OK');
-            } else {
-                arrayTweets.push({
-                    username: req.body.username,
-                    tweet: req.body.tweet
-                })
-                res.send('OK');
+
+    const { username, tweet } = req.body;
+
+    if (!username || !tweet) {
+        return res.status(400).send('Todos os campos são obrigatórios!');
+    } 
+        for (let i = 0; i < nickname.length; i++) {
+            if (username === nickname[i].username) {
+                if (arrayTweets.length === 10) {
+                    arrayTweets.shift()
+                    arrayTweets.push({
+                        username: username,
+                        tweet: tweet
+                    })
+                    return res.status(201).send('OK');
+                } else {
+                    arrayTweets.push({
+                        username: username,
+                        tweet: tweet
+                    })
+                    return res.status(201).send('OK');
+                }
             }
-        }
+        
+        res.status(401).send('UNAUTHORIZED');
     }
-    res.send('UNAUTHORIZED');
 })
 
 
 app.get("/tweets", (req, res) => {
-    for(let i = 0; i < nickname.length; i++) {
-        for(let j = 0; j < arrayTweets.length; j++) {
-            if(nickname[i].username === arrayTweets[j].username) {
+
+    for (let i = 0; i < nickname.length; i++) {
+        for (let j = 0; j < arrayTweets.length; j++) {
+            if (nickname[i].username === arrayTweets[j].username) {
                 renderTweets.push({
                     username: nickname[i].username,
                     avatar: nickname[i].avatar,
