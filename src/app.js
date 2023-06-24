@@ -30,27 +30,26 @@ app.post("/tweets", (req, res) => {
 
     if (!username || !tweet) {
         return res.status(400).send('Todos os campos são obrigatórios!');
-    } 
-        for (let i = 0; i < nickname.length; i++) {
-            if (username === nickname[i].username) {
-                if (arrayTweets.length === 10) {
-                    arrayTweets.shift()
-                    arrayTweets.push({
-                        username: username,
-                        tweet: tweet
-                    })
-                    return res.status(201).send('OK');
-                } else {
-                    arrayTweets.push({
-                        username: username,
-                        tweet: tweet
-                    })
-                    return res.status(201).send('OK');
-                }
-            }
-        
-        res.status(401).send('UNAUTHORIZED');
     }
+    for (let i = 0; i < nickname.length; i++) {
+        if (username === nickname[i].username) {
+            if (arrayTweets.length === 10) {
+                arrayTweets.shift()
+                arrayTweets.push({
+                    username: username,
+                    tweet: tweet
+                })
+                return res.status(201).send('OK');
+            } else {
+                arrayTweets.push({
+                    username: username,
+                    tweet: tweet
+                })
+                return res.status(201).send('OK');
+            }
+        }
+    }
+    res.status(401).send('UNAUTHORIZED');
 })
 
 
