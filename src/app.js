@@ -9,12 +9,13 @@ app.use(express.json());
 const nickname = [];
 const arrayTweets = [];
 const renderTweets = [];
+//const userTweets = [];
 
 app.post("/sign-up", (req, res) => {
 
     const { username, avatar } = req.body;
 
-    if (!username || !avatar || typeof(username) !== "string") {
+    if (!username || !avatar || typeof(username) !== "string" || typeof(avatar) !== "string") {
         return res.status(400).send('Todos os campos são obrigatórios!');
     }
     nickname.push({
@@ -28,7 +29,7 @@ app.post("/tweets", (req, res) => {
 
     const { username, tweet } = req.body;
 
-    if (!username || !tweet) {
+    if (!username || !tweet || typeof(tweet) !== "string") {
         return res.status(400).send('Todos os campos são obrigatórios!');
     }
     for (let i = 0; i < nickname.length; i++) {
@@ -67,6 +68,13 @@ app.get("/tweets", (req, res) => {
         }
     }
     res.send(renderTweets);
+})
+
+app.get("/tweets/:USERNAME", (req, res) => {
+    const {USERNAME} = req.params;
+
+    const userTweets = renderTweets.filter( userT => userT.username === USERNAME);
+    res.send(userTweets);
 })
 
 const PORT = 5000;
