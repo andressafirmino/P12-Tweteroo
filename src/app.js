@@ -31,7 +31,7 @@ app.post("/tweets", (req, res) => {
     const {user} = req.headers;
     console.log(user);
 
-    if (!username || !tweet || typeof(tweet) !== "string") {
+    if (!user || !tweet || typeof(tweet) !== "string") {
         return res.status(400).send('Todos os campos são obrigatórios!');
     }
     for (let i = 0; i < nickname.length; i++) {
@@ -74,8 +74,9 @@ app.get("/tweets", (req, res) => {
 
 app.get("/tweets/:USERNAME", (req, res) => {
     const {USERNAME} = req.params;
-
+    console.log(USERNAME);
     const userTweets = renderTweets.filter( userT => userT.username === USERNAME);
+    console.log(userT);
     res.send(userTweets);
 })
 
