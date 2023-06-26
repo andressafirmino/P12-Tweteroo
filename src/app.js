@@ -9,8 +9,7 @@ app.use(express.json());
 const nickname = [];
 const arrayTweets = [];
 const renderTweets = [];
-const userTweets = [];
-const pageTweets = [];
+let userTweets = [];
 
 app.post("/sign-up", (req, res) => {
 
@@ -37,15 +36,14 @@ app.post("/tweets", (req, res) => {
     }
     for (let i = 0; i < nickname.length; i++) {
         if (user === nickname[i].username) {
-            // if (arrayTweets.length === 10) {
-            //     arrayTweets.shift()
-            //     arrayTweets.push({
-            //         username: user,
-            //         tweet: tweet
-            //     })
-            //     return res.status(201).send('OK');
-            //} 
-             {
+            if (arrayTweets.length === 10) {
+                arrayTweets.shift()
+                arrayTweets.push({
+                    username: user,
+                    tweet: tweet
+                })
+                return res.status(201).send('OK');
+            } else {
                 arrayTweets.push({
                     username: user,
                     tweet: tweet
@@ -60,30 +58,11 @@ app.post("/tweets", (req, res) => {
 
 app.get("/tweets", (req, res) => {
 
-    const {page} = req.query;
-    arrayTweets.reverse();
-
-    if(page) {
-        let position = page*10;        
-        renderTweets = arrayTweets.slice(position - 10, position);
-        for (let i = 0; i < nickname.length; i++) {
-            for (let j = 0; j < arrayTweets.length; j++) {
-                if (nickname[i].username === arrayTweets[j].username) {
-                    pageTweets.push({
-                        username: nickname[i].username,
-                        avatar: nickname[i].avatar,
-                        tweet: arrayTweets[j].tweet
-                    })
-                }
-            }
-        }
-        return res.send(pageTweets);
-    }
-    renderTweets = arrayTweets.slice(0, 10);
+    const {page, size} = req.query;
     for (let i = 0; i < nickname.length; i++) {
         for (let j = 0; j < arrayTweets.length; j++) {
             if (nickname[i].username === arrayTweets[j].username) {
-                pageTweets.push({
+                renderTweets.push({
                     username: nickname[i].username,
                     avatar: nickname[i].avatar,
                     tweet: arrayTweets[j].tweet
@@ -91,7 +70,7 @@ app.get("/tweets", (req, res) => {
             }
         }
     }
-    res.send(pageTweets);
+    res.status(200).send(renderTweets);
 })
 
 app.get("/tweets/:USERNAME", (req, res) => {
