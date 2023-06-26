@@ -9,7 +9,7 @@ app.use(express.json());
 const nickname = [];
 const arrayTweets = [];
 const renderTweets = [];
-//const userTweets = [];
+const userTweets = [];
 
 app.post("/sign-up", (req, res) => {
 
@@ -75,9 +75,9 @@ app.get("/tweets", (req, res) => {
 app.get("/tweets/:USERNAME", (req, res) => {
     const {USERNAME} = req.params;
     console.log(USERNAME);
-    const userTweets = renderTweets.filter( userT => userT.username === USERNAME);
+    userTweets = renderTweets.filter( userT => userT.username === USERNAME);
     console.log(userT);
-    res.send(userTweets);
+    res.status(200).send(userTweets);
 })
 
 const PORT = 5000;
