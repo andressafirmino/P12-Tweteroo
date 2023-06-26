@@ -9,7 +9,7 @@ app.use(express.json());
 const nickname = [];
 const arrayTweets = [];
 const renderTweets = [];
-const userTweets = [];
+let userTweets = [];
 
 app.post("/sign-up", (req, res) => {
 
@@ -58,6 +58,7 @@ app.post("/tweets", (req, res) => {
 
 app.get("/tweets", (req, res) => {
 
+    const {page, size} = req.query;
     for (let i = 0; i < nickname.length; i++) {
         for (let j = 0; j < arrayTweets.length; j++) {
             if (nickname[i].username === arrayTweets[j].username) {
@@ -75,8 +76,20 @@ app.get("/tweets", (req, res) => {
 app.get("/tweets/:USERNAME", (req, res) => {
     const {USERNAME} = req.params;
     console.log(USERNAME);
+    for (let i = 0; i < nickname.length; i++) {
+        for (let j = 0; j < arrayTweets.length; j++) {
+            if (nickname[i].username === arrayTweets[j].username) {
+                renderTweets.push({
+                    username: nickname[i].username,
+                    avatar: nickname[i].avatar,
+                    tweet: arrayTweets[j].tweet
+                })
+            }
+        }
+    }
     userTweets = renderTweets.filter( userT => userT.username === USERNAME);
-    console.log(userT);
+    console.log(renderTweets);
+    console.log(userTweets);
     res.status(200).send(userTweets);
 })
 
