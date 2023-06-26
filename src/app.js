@@ -28,22 +28,24 @@ app.post("/sign-up", (req, res) => {
 app.post("/tweets", (req, res) => {
 
     const { username, tweet } = req.body;
+    const {user} = req.headers;
+    console.log(user);
 
     if (!username || !tweet || typeof(tweet) !== "string") {
         return res.status(400).send('Todos os campos são obrigatórios!');
     }
     for (let i = 0; i < nickname.length; i++) {
-        if (username === nickname[i].username) {
+        if (user === nickname[i].username) {
             if (arrayTweets.length === 10) {
                 arrayTweets.shift()
                 arrayTweets.push({
-                    username: username,
+                    username: user,
                     tweet: tweet
                 })
                 return res.status(201).send('OK');
             } else {
                 arrayTweets.push({
-                    username: username,
+                    username: user,
                     tweet: tweet
                 })
                 return res.status(201).send('OK');
